@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NLog;
 
 namespace VisionA
 {
@@ -20,6 +21,8 @@ namespace VisionA
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Logger _log = LogManager.GetCurrentClassLogger();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,10 +49,11 @@ namespace VisionA
 
         private void RandomLatter()
         {
-            var str = "QWERTYUIOPASDFGHJKLZXCVBNM";
+            var str = "WERTYUIOPASDFHJKLZXCVBNM";
             Random rnd = new Random();
             var r = rnd.Next(0, str.Length - 1);
             VisionLetter.Text = str[r].ToString();
+            LatterFonetSize.Text = VisionLetter.FontSize.ToString();
         }
 
         private void MinusButton_Click(object sender, RoutedEventArgs e)
@@ -82,12 +86,19 @@ namespace VisionA
                     var k = e.Key.ToString();
                     if (k == VisionLetter.Text)
                     {
-                        LatterFonetSize.Background = Brushes.Green;
+                        ContolPanel.Background = Brushes.Green;
+                        _log.Info($"ok: {k}, fontsize: {VisionLetter.FontSize}");
+
+                        SucessTxt.Text = (int.Parse(SucessTxt.Text) + 1).ToString();
+
                         RandomLatter();
                     }
                     else
                     {
-                        LatterFonetSize.Background = Brushes.Red;
+                        ContolPanel.Background = Brushes.Red;
+                        _log.Info($"failed: {k} real:{VisionLetter.Text}, fontsize: {VisionLetter.FontSize}");
+
+                        FaildTxt.Text = (int.Parse(FaildTxt.Text) + 1).ToString();
                     }
                     break;
 
