@@ -74,16 +74,16 @@ namespace VisionA
         {
             switch (e.Key)
             {
-                case Key.D1:
+                case Key.OemPlus:
                     PlusFont();
                     break;
-                case Key.D2:
+                case Key.OemMinus:
                     MinusFont();
                     break;
-                case Key.D3:
+                case Key.Space:
                     RandomLatter();
                     break;
-                case Key.D4:
+                case Key.D0:
                     TimeFlashLetter();
                     break;
                 default:
