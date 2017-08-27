@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,6 +83,9 @@ namespace VisionA
                 case Key.D3:
                     RandomLatter();
                     break;
+                case Key.D4:
+                    TimeFlashLetter();
+                    break;
                 default:
                     var k = e.Key.ToString();
                     if (k == VisionLetter.Text)
@@ -103,6 +107,30 @@ namespace VisionA
                     break;
 
             }
+        }
+
+        private void TimeFlashLetter()
+        {
+            var oldFs = VisionLetter.FontSize;
+            VisionLetter.FontSize = 500;
+
+
+            Task task = Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(1000);
+            });
+
+            Task UITask = task.ContinueWith((x) =>
+            {
+                VisionLetter.FontSize = oldFs;
+                //this.TextBlock1.Text = "Complete";
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+
+            // Task.Run(() =>
+            //{
+            //    Thread.Sleep(3000);
+            //    VisionLetter.FontSize = oldFs;
+            //});
         }
     }
 }
