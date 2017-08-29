@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        FontFamily="Arial Black" WindowState="Maximized"
+        FontFamily="Arial Black" WindowState="Maximized" Closed="MainWindow_OnClosed"
         xmlns:local="clr-namespace:VisionA"
         FontSize="50"
         mc:Ignorable="d"
@@ -20,6 +20,13 @@
             <Button Click="PlusButton_Click" >+</Button>
             <Button Click="MinusButton_Click">-</Button>
             <Button Click="RundomButton_Click">R</Button>
+            <StackPanel>
+                <RadioButton Name="RdEays" FontSize="15" IsChecked="True">Eays</RadioButton>
+                <RadioButton  Name="RdLenses65" FontSize="15">Lenses 6.5</RadioButton>
+                <RadioButton Name="RdLenses70" FontSize="15">Lenses 7</RadioButton>
+                <RadioButton Name="RdGlasses65" FontSize="15">Glasses 6.5</RadioButton>
+                <RadioButton Name="RdGlasses70" FontSize="15">Glasses 7</RadioButton>
+            </StackPanel>
     <TextBlock x:Name="LatterFonetSize" MinWidth="300"></TextBlock>
             <TextBlock Name="SucessTxt" Foreground="GreenYellow" HorizontalAlignment="Right">0</TextBlock>
             <TextBlock Name="FaildTxt" Foreground="DarkRed" HorizontalAlignment="Right">0</TextBlock>

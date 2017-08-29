@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -24,10 +23,19 @@ namespace VisionA
     {
         private Logger _log = LogManager.GetCurrentClassLogger();
 
+        private StructuredLog _structuredLog = StructuredLog.Load();
+
+        private DateTime _dateId = DateTime.Now;
+
         public MainWindow()
         {
             InitializeComponent();
             RandomLatter();
+
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    _structuredLog.Entries.Add(CreateStructuredLogEntry(false));
+            //}
         }
 
         private void PlusButton_Click(object sender, RoutedEventArgs e)
@@ -92,6 +100,7 @@ namespace VisionA
                     {
                         ContolPanel.Background = Brushes.Green;
                         _log.Info($"ok: {k}, fontsize: {VisionLetter.FontSize}");
+                        _structuredLog.Entries.Add(CreateStructuredLogEntry(true));
 
                         SucessTxt.Text = (int.Parse(SucessTxt.Text) + 1).ToString();
 
@@ -101,12 +110,31 @@ namespace VisionA
                     {
                         ContolPanel.Background = Brushes.Red;
                         _log.Info($"failed: {k} real:{VisionLetter.Text}, fontsize: {VisionLetter.FontSize}");
+                        _structuredLog.Entries.Add(CreateStructuredLogEntry(false));
 
                         FaildTxt.Text = (int.Parse(FaildTxt.Text) + 1).ToString();
                     }
                     break;
 
             }
+        }
+
+        private StructuredLogEntry CreateStructuredLogEntry(bool isOk)
+        {
+            var le =new StructuredLogEntry() {Time = DateTime.Now, IsOk = isOk, FontSize = VisionLetter.FontSize, DateId = _dateId};
+
+            if (RdEays.IsChecked == true) le.EysExt = RdEays.Content.ToString();
+            if (RdLenses65.IsChecked == true) le.EysExt = RdLenses65.Content.ToString();
+            if (RdLenses70.IsChecked == true) le.EysExt = RdLenses70.Content.ToString();
+            if (RdGlasses65.IsChecked == true) le.EysExt = RdGlasses65.Content.ToString();
+            if (RdGlasses70.IsChecked == true) le.EysExt = RdGlasses70.Content.ToString();
+
+            le.PrimaryScreenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            le.PrimaryScreennWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+            le.MachineName = Environment.MachineName;
+            le.UserName = Environment.UserName;
+
+            return le;
         }
 
         private void TimeFlashLetter()
@@ -123,14 +151,12 @@ namespace VisionA
             Task UITask = task.ContinueWith((x) =>
             {
                 VisionLetter.FontSize = oldFs;
-                //this.TextBlock1.Text = "Complete";
             }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
 
-            // Task.Run(() =>
-            //{
-            //    Thread.Sleep(3000);
-            //    VisionLetter.FontSize = oldFs;
-            //});
+        private void MainWindow_OnClosed(object sender, EventArgs e)
+        {
+            _structuredLog.Save();
         }
     }
 }
